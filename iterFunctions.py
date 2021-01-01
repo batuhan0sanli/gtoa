@@ -28,9 +28,9 @@ def information(iter, ev, pop):
 
 # Calculates the number of Iterations
 def calcIterSize(stopCriteria, popSize, stopNum):
-    if stopCriteria == "it":
+    if stopCriteria == "stit":
         return stopNum
-    elif stopCriteria  == "ev":
+    elif stopCriteria  == "stev":
         return (stopNum - popSize) // (2*popSize + 1)
 
 # Clip for iteration
@@ -42,9 +42,9 @@ def iterationClip(cand, minLimit, maxLimit, limitless):
 
 # Calculates the number of stop criteria number for Step 2
 def stopNumCalcFirst(stopCriteria, popSize):
-    if stopCriteria == "it":
+    if stopCriteria == "stit":
         return 0
-    elif stopCriteria == "ev":
+    elif stopCriteria == "stev":
         return popSize
     else:
         raise Exception("stopCriteria can be ONLY 'it' or 'ev'")
