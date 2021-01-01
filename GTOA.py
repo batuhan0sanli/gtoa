@@ -9,28 +9,21 @@ import copy
 
 # ---------------------------------------------
 # --------------- MAIN FUNCTION ---------------
-def main(popSize=user.popSize, stopCriteria=user.stopCriteria , stopNum=user.stopNum, F=user.F, inputSize=user.inputSize,
+def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stopNum, F=user.F, inputSize=user.inputSize,
          minLimit=user.minLimit, maxLimit=user.maxLimit, limitless=user.limitless,
          printSpace=False, printIteration=False, printBestCand=False,
-         saveCSV=False, onlyBest=True, csvMode='a'
-         ):
+         saveCSV=False, onlyBest=True, csvMode='a'):
 
-    # Step a: Dictionaries
+    # Step a: Dictionary
     prop = {}
 
-    # static termination criteria
-    if stopCriteria[:2] == "st":
-        prop["isStatic"] = True
-        prop["continue"] = True
-
-    # dynamic termination criteria
-    elif stopCriteria[:2] == "dy":
-        prop["isStatic"] = False
-        prop["continue"] = True        # Şu anda durdurma limitinin altında olduğunu ve devam edileceğini gösterir.
+    prop["isStatic"] = True if stopCriteria[:2] == "st" else False      # static -> True    # dynamic -> False
+    prop["isIteration"] = True if stopCriteria[2:] == "it" else False   # iteration -> True | evaluation -> False
+    prop["continue"] = True                                             # Always True because iteration will start
 
     # Step b: Information Termination Criteria
     if prop["isStatic"]:
-        iterSize = ifunc.calcIterSize(stopCriteria, popSize, stopNum)
+        max_iter = ifunc.calcIterSize(prop["isIteration"], popSize, stopNum)
     iter = 0
     ev = copy.copy(popSize)
 
@@ -42,8 +35,7 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria , stopNum=user.sto
 
     # Step 3: Termination criteria
 
-    if prop["isStatic"]: term = lambda iter, iterSize: iter < iterSize
-    while term(iter, iterSize):
+    while prop["continue"]:
         # Step 4: Teacher allocation phase
         pop.sort(key=lambda x: x[-1])  # Pop List is sorting.
         teacher = ifunc.teacherAllo(pop)
@@ -83,6 +75,9 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria , stopNum=user.sto
 
         if printBestCand:
             print(str(bestCand))
+
+        # Termination
+        if prop["isStatic"] and not iter < max_iter: prop["continue"]=False
 
     # Save CSV Settings
     if saveCSV:
