@@ -1,12 +1,5 @@
-# genellik
-# kesinlik
-# sağlamlık
-# verimlilik
-
-
-# Gerekli kütüphaneler import ediliyor
 # ------------------------------------
-from solveTrussL import *
+from solveTrussL import solveTrussL
 import copy
 # ------------------------------------
 
@@ -70,18 +63,7 @@ def objectiveFunction(alan,yapi):
     dE=sum([i-1 for i in dR if i>1])
     sE=sum([i-1 for i in sR if i>1])
     amac=w*(1+dE+sE)**2
-    #print(amac)
     return(amac)
-
-
-# toplam yer değiştirme ihlali: 6.37 (1.445, 2.38, 2.36)
-# toplam gerilme ihlali: 30.37 (1.4, 1.81)
-# Bunu optimize et: W = w(1+p)^2
-# W = 5968.63*(1+6.37+30.37)^2=8.5*10^6 KÖTÜ
-# W = 5968.63*(1+1.445+2.38+2.35+1.4+1.81)^2 İYİ
-# pipeline
-
-denemeAlan=[22.12, 10.21, 4.55, 1.23, 5.66, 34.33, 23.11, 24.33, 11.34, 3.23]
 
 """
 print("--------------------------")
