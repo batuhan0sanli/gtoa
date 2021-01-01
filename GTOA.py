@@ -9,21 +9,25 @@ import copy
 
 # ---------------------------------------------
 # --------------- MAIN FUNCTION ---------------
-def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stopNum, F=user.F, inputSize=user.inputSize,
-         minLimit=user.minLimit, maxLimit=user.maxLimit, limitless=user.limitless,
+def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stopNum, impRate=user.impRate, F=user.F,
+         inputSize=user.inputSize, minLimit=user.minLimit, maxLimit=user.maxLimit, limitless=user.limitless,
          printSpace=False, printIteration=False, printBestCand=False,
          saveCSV=False, onlyBest=True, csvMode='a'):
 
     # Step a: Dictionary
     prop = {}
 
-    prop["isStatic"] = True if stopCriteria[:2] == "st" else False      # static -> True    # dynamic -> False
+    prop["isStatic"] = True if stopCriteria[:2] == "st" else False      # static -> True    | dynamic -> False
     prop["isIteration"] = True if stopCriteria[2:] == "it" else False   # iteration -> True | evaluation -> False
-    prop["continue"] = True                                             # Always True because iteration will start
 
     # Step b: Information Termination Criteria
-    if prop["isStatic"]:
-        max_iter = ifunc.calcIterSize(prop["isIteration"], popSize, stopNum)
+    if prop["isStatic"]:        # For Static
+        max_iter = ifunc.calcIterSize(prop["isIteration"], popSize, stopNum)    # Maksimum izin verilen iterasyon
+
+    else:                       # For Dynamic
+        max_noImp = ifunc.calcIterSize(prop["isIteration"], popSize, stopNum)   # Maksimum iyileşmesiz izin verilen iterasyon
+        prop["termQ"] = False   # max_noImp sayısına ulaşmadan sorgu yapılmamasını sağlar.
+
     iter = 0
     ev = copy.copy(popSize)
 
@@ -33,9 +37,11 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
     # Step 2: Population evaluation
     pop = ifunc.evaluatePop(pop)
 
-    # Step 3: Termination criteria
+    # Dynamic Termination - Best Cand List
+    bestCandList = []
 
-    while prop["continue"]:
+
+    while True:
         # Step 4: Teacher allocation phase
         pop.sort(key=lambda x: x[-1])  # Pop List is sorting.
         teacher = ifunc.teacherAllo(pop)
@@ -61,23 +67,32 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
         # Step c: Print information
         iter += 1
         ev += 2 * popSize + 1
-        #ifunc.information(iter, ev, pop)
 
-        # Step d: Configure kwargs
+        # Step d: Select Best Candidate - Append to bestCandList
         bestCand = min(pop, key=lambda x: x[-1])
+        bestCandList.append(bestCand[-1])
 
         # Print Settings
         if printSpace:
             print("")
 
         if printIteration:
-            print("Iteration No: {}     Evaluation No: {}     Best Solve: {}".format(iter, ev, bestCand[-1]))
+            print(f"Iteration No: {iter}    Evaluation No: {ev}    Best Solve: {bestCand[-1]}")
 
         if printBestCand:
             print(str(bestCand))
 
-        # Termination
-        if prop["isStatic"] and not iter < max_iter: prop["continue"]=False
+        # Dynamic Termination - Edit TermQ
+        if not prop["termQ"]:
+            if iter == max_noImp: prop["termQ"] = True
+
+        # Static Termination
+        if prop["isStatic"] and not iter < max_iter: break
+        # Dynamic Termination
+        else:
+            if prop["termQ"]:   # Eğer Minimum iterasyona ulaşılmışsa
+                if bestCandList[-max_noImp]*(1-impRate) < bestCand[-1]: break
+
 
     # Save CSV Settings
     if saveCSV:
@@ -88,6 +103,7 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
     return pop
 # --------------- MAIN FUNCTION ---------------
 # ---------------------------------------------
+
 
 
 if __name__ == '__main__':

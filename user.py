@@ -9,14 +9,13 @@ popSize = 20
 # Durdurma kriterinin iterasyon mu yoksa analiz bazlı mı çalışılacağı
 # (static iteration, static evaluation, dynamic iteration, dynamic evaluation) ("stit", "stev", "dyit" "dyev")
 # Son n analizde %0.1'den daha az iyileşme olursa dur
-stopCriteria = "stev"
+stopCriteria = "dyit"
 
-# Maksimum izin verilen iterasyon / analiz sayısı
-stopNum = 25000
+# Maksimum izin verilen iterasyon / analiz sayısı  /  maksimum iyileşme olmadan izin verilen iterasyon / analiz sayısı
+stopNum = 300
 
-# Stop if there is no improvement in the last n iteration / analyzes
-maxNoImp = 1000
-
+# İstenen İyileşme oranı
+impRate = 0.0001
 
 # F değeri (öğretim faktörü) (1 veya 2 seçilebilir)
 F = 1
