@@ -27,10 +27,10 @@ def information(iter, ev, pop):
     #tqdm.write("\n")
 
 # Calculates the number of Iterations
-def calcIterSize(stopCriteria, popSize, stopNum):
-    if stopCriteria == "stit":
+def calcIterSize(isIteration, popSize, stopNum):
+    if isIteration:
         return stopNum
-    elif stopCriteria  == "stev":
+    else:
         return (stopNum - popSize) // (2*popSize + 1)
 
 # Clip for iteration
