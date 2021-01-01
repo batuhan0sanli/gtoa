@@ -54,8 +54,7 @@ numRun = 10
 
 for i,popSize in zip(trange(len(popSizes), desc="Total Run     "), popSizes):
     for j in trange(numRun, desc = f'N={fixLength(popSize, 4)}        ', leave=False):
-        GTOA.main(popSize=popSize, saveCSV=True, onlyBest=True, csvMode='a',
-            tqdmLeave=False, tqdmDesc=f"GTOA Analysis ")
+        GTOA.main(popSize=popSize, saveCSV=True, onlyBest=True, csvMode='a')
 
 #GTOA.main(saveCSV=True, onlyBest=False, csvMode='w')
 GTOA.main()
