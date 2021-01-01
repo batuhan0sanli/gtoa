@@ -12,12 +12,25 @@ import copy
 def main(popSize=user.popSize, stopCriteria=user.stopCriteria , stopNum=user.stopNum, F=user.F, inputSize=user.inputSize,
          minLimit=user.minLimit, maxLimit=user.maxLimit, limitless=user.limitless,
          printSpace=False, printIteration=False, printBestCand=False,
-         saveCSV=False, onlyBest=True, csvMode='a',
-         tqdmLeave=True, tqdmDesc=''):
+         saveCSV=False, onlyBest=True, csvMode='a'
+         ):
 
-    # Step a: Information Termination Criteria
-    iterSize = ifunc.calcIterSize(stopCriteria, popSize, stopNum)
-    currentNum = 0
+    # Step a: Dictionaries
+    prop = {}
+
+    # static termination criteria
+    if stopCriteria[:2] == "st":
+        prop["isStatic"] = True
+        prop["continue"] = True
+
+    # dynamic termination criteria
+    elif stopCriteria[:2] == "dy":
+        prop["isStatic"] = False
+        prop["continue"] = True        # Şu anda durdurma limitinin altında olduğunu ve devam edileceğini gösterir.
+
+    # Step b: Information Termination Criteria
+    if prop["isStatic"]:
+        iterSize = ifunc.calcIterSize(stopCriteria, popSize, stopNum)
     iter = 0
     ev = copy.copy(popSize)
 
@@ -26,11 +39,11 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria , stopNum=user.sto
 
     # Step 2: Population evaluation
     pop = ifunc.evaluatePop(pop)
-    #currentNum += ifunc.stopNumCalcFirst(stopCriteria, popSize)
-    #ifunc.information(iter, ev, pop)
 
     # Step 3: Termination criteria
-    for i in range(iterSize):
+
+    if prop["isStatic"]: term = lambda iter, iterSize: iter < iterSize
+    while term(iter, iterSize):
         # Step 4: Teacher allocation phase
         pop.sort(key=lambda x: x[-1])  # Pop List is sorting.
         teacher = ifunc.teacherAllo(pop)
@@ -53,9 +66,6 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria , stopNum=user.sto
         # Step 7: Construct population
         pop = lastBestGroup + lastWorstGroup
 
-        # Step 8: Population evaluation
-        #currentNum += ifunc.stopNumCalc(stopCriteria, popSize)
-
         # Step c: Print information
         iter += 1
         ev += 2 * popSize + 1
@@ -69,16 +79,18 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria , stopNum=user.sto
             print("")
 
         if printIteration:
-            print("Iteration No: {}     Evalution No: {}     Best Solve: {}".format(iter, ev, bestCand[-1]))
+            print("Iteration No: {}     Evaluation No: {}     Best Solve: {}".format(iter, ev, bestCand[-1]))
 
         if printBestCand:
             print(str(bestCand))
-    # Sace CSV Settings
+
+    # Save CSV Settings
     if saveCSV:
         if onlyBest:
             ifunc.writeCSV(bestCand, popSize, stopNum, F, mode=csvMode, onlyBest=onlyBest)
         else:
             ifunc.writeCSV(pop, popSize, stopNum, F, mode=csvMode, onlyBest=onlyBest)
+    return pop
 # --------------- MAIN FUNCTION ---------------
 # ---------------------------------------------
 

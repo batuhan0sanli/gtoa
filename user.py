@@ -6,12 +6,17 @@ import objectiveFunction as obj
 # Popülasyon Boyutu
 popSize = 20
 
-# Durdurma kriterinin iterasyon mu yoksa analiz bazlı mı çalışılacağı (iteration or evaluation) ("it", "ev")
+# Durdurma kriterinin iterasyon mu yoksa analiz bazlı mı çalışılacağı
+# (static iteration, static evaluation, dynamic iteration, dynamic evaluation) ("stit", "stev", "dyit" "dyev")
 # Son n analizde %0.1'den daha az iyileşme olursa dur
-stopCriteria = "ev"
+stopCriteria = "stev"
 
 # Maksimum izin verilen iterasyon / analiz sayısı
 stopNum = 25000
+
+# Stop if there is no improvement in the last n iteration / analyzes
+maxNoImp = 1000
+
 
 # F değeri (öğretim faktörü) (1 veya 2 seçilebilir)
 F = 1

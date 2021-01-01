@@ -47,8 +47,10 @@ for i in a:
     time.sleep(0.6)
 """
 
-from utilities import fixLength
+a=5
+b=10
+f = lambda a,b : a < b
 
-no = 12345.454545
-no = fixLength(no, 6)
-print(no)
+while f(a,b):
+    print("Tes")
+    a = 15
