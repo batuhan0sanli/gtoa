@@ -1,0 +1,2 @@
+openseespy==3.2.2.6
+tqdm==4.55.0
