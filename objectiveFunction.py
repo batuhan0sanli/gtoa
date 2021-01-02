@@ -1,5 +1,12 @@
+# genellik
+# kesinlik
+# sağlamlık
+# verimlilik
+
+
+# Gerekli kütüphaneler import ediliyor
 # ------------------------------------
-from solveTrussL import solveTrussL
+from solveTrussL import *
 import copy
 # ------------------------------------
 
@@ -35,22 +42,10 @@ import copy
 
 
 
-# ----- 10-bar Planar Cantilever -----
-# solution by Mustafa Sonmez, Artificial Bee Colony algorithm for optimization of truss structures, 2011
-size10bar2D=[
-    [10000.0,0.1],
-    [[1,0.0,0.0],[2,0.0,360.0],[3,360.0,0.0],[4,360.0,360.0],[5,720.0,0.0],[6,720.0,360.0]],
-    [[1,1,1],[2,1,1]],
-    [30.548,0.1,23.18,15.218,0.1,0.551,7.463,21.058,21.501,0.1],
-    [[1,1,2,4],[2,2,4,6],[3,3,1,3],[4,4,3,5],[5,5,3,4],[6,6,5,6],[7,7,2,3],[8,8,1,4],[9,9,4,5],[10,10,3,6]],
-    [
-        [[3,0.0,-100.0],[5,0.0,-100.0]]
-    ]
-]
-# ------------------------------------
+
 
 # cozum fonksiyonu sonlu elemanlar cozucuzunu 1 kez çağırır
-def objectiveFunction(alan,yapi):
+def objectiveFunction(alan, yapi, factor, iter, iter_div):
     yeniYapi=copy.deepcopy(yapi)
     yeniYapi[3]=alan
     sol=solveTrussL(yeniYapi)
@@ -62,8 +57,19 @@ def objectiveFunction(alan,yapi):
 
     dE=sum([i-1 for i in dR if i>1])
     sE=sum([i-1 for i in sR if i>1])
-    amac=w*(1+dE+sE)**2
+    amac=w*(1+dE+sE)**(1+factor*(iter/iter_div))
+    #print(amac)
     return(amac)
+
+
+# toplam yer değiştirme ihlali: 6.37 (1.445, 2.38, 2.36)
+# toplam gerilme ihlali: 30.37 (1.4, 1.81)
+# Bunu optimize et: W = w(1+p)^2
+# W = 5968.63*(1+6.37+30.37)^2=8.5*10^6 KÖTÜ
+# W = 5968.63*(1+1.445+2.38+2.35+1.4+1.81)^2 İYİ
+# pipeline
+
+denemeAlan=[22.12, 10.21, 4.55, 1.23, 5.66, 34.33, 23.11, 24.33, 11.34, 3.23]
 
 """
 print("--------------------------")

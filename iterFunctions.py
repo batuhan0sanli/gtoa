@@ -70,25 +70,30 @@ def firstPop(inputSize, popSize, minLimit, maxLimit):
     return [[random.uniform(minLimit, maxLimit) for i in range(inputSize)] + [0] for j in range(popSize)]
 
 # Evaluate the population. Including all candidate.
-def evaluatePop(pop):
-    for cand in pop:
-        cand[-1] = objFunc(cand[:-1])
+def evaluatePop(pop, iter, adaptive_pen):
+    if adaptive_pen:
+        for cand in pop:
+            cand[-1] = objFunc(cand[:-1], iter)
+    else:
+        for cand in pop:
+            cand[-1] = objFunc(cand[:-1])
     return pop
 
 # Evaluate the candidate. ONLY one candidate. ("cand" be a list)
-def evaluateCand(cand):
-    cand[-1] = objFunc(cand[:-1])
+def evaluateCand(cand, iter, adaptive_pen):
+    if adaptive_pen: cand[-1] = objFunc(cand[:-1], iter)
+    else: cand[-1] = objFunc(cand[:-1])
     return cand
 
 # Teacher Allocation - Want a SORTED population list (Step 4)
-def teacherAllo(sortedPop):
+def teacherAllo(sortedPop, iter, adaptive_pen):
     cand1 = sortedPop[0]
     cand2 = ut.meanList(sortedPop[0], sortedPop[1], sortedPop[2])  #  Three best individuals are selected and averaged
-    cand2 = evaluateCand(cand2)     # Evalueted candidate
+    cand2 = evaluateCand(cand2, iter, adaptive_pen)     # Evalueted candidate
     return chooseCand(cand1, cand2)
 
 # (Step 6.1.1)
-def teachPhaseBest(pop, teacher, F, minLimit, maxLimit, limitless):
+def teachPhaseBest(pop, teacher, F, minLimit, maxLimit, limitless, iter, adaptive_pen):
     # Random Numbers
 
     #c = 1-b
@@ -106,12 +111,12 @@ def teachPhaseBest(pop, teacher, F, minLimit, maxLimit, limitless):
 
         # Clip
         newCand = iterationClip(newCand, minLimit, maxLimit, limitless)
-        newCand = evaluateCand(newCand + [0])
+        newCand = evaluateCand(newCand + [0], iter, adaptive_pen)
         newPop.append(chooseCand(cand, newCand))
     return newPop
 
 # (Step 6.1.2, Step 6.2.2)
-def studentPhase(pop, oldPop, minLimit, maxLimit, limitless):
+def studentPhase(pop, oldPop, minLimit, maxLimit, limitless, iter, adaptive_pen):
     # Random Numbers
 
     newPop = []
@@ -130,12 +135,12 @@ def studentPhase(pop, oldPop, minLimit, maxLimit, limitless):
 
         # Clip
         newCand = iterationClip(newCand, minLimit, maxLimit, limitless)
-        newCand = evaluateCand(newCand + [0])
+        newCand = evaluateCand(newCand + [0], iter, adaptive_pen)
         newPop.append(chooseCand(cand, newCand))
     return newPop
 
 # (Step 6.2.1)
-def teachPhaseWorst(pop, teacher, minLimit, maxLimit, limitless):
+def teachPhaseWorst(pop, teacher, minLimit, maxLimit, limitless, iter, adaptive_pen):
     # Random Numbers
 
 
@@ -149,7 +154,7 @@ def teachPhaseWorst(pop, teacher, minLimit, maxLimit, limitless):
 
         # Clip
         newCand = iterationClip(newCand, minLimit, maxLimit, limitless)
-        newCand = evaluateCand(newCand + [0])
+        newCand = evaluateCand(newCand + [0], iter, adaptive_pen)
         newPop.append(chooseCand(cand, newCand))
     return newPop
 
