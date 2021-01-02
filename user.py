@@ -30,8 +30,20 @@ minLimit, maxLimit = 0.1, 35
 # Sınır yok mu?
 limitless = False
 
+
+# --------------- IMPROVEMENTS ---------------
+# --------------------------------------------
+
+# Ceza'nın önemi iterasyon ilerledikçe yükselsin mi?
+adaptive_pen = True
+
 # Amaç fonksiyonunda Ceza Katsayısı
 factor = 1
+
+# --------------------------------------------
+# --------------- IMPROVEMENTS ---------------
+
+
 
 # Amaç fonksiyonu - Objective Function (girdiler liste içerisinde verilmelidir)
 def objFunc(alan, iter=stopNum, factor=factor, iter_div=stopNum):

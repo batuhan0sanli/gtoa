@@ -11,6 +11,7 @@ import copy
 # --------------- MAIN FUNCTION ---------------
 def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stopNum, impRate=user.impRate, F=user.F,
          inputSize=user.inputSize, minLimit=user.minLimit, maxLimit=user.maxLimit, limitless=user.limitless,
+         adaptive_pen=user.adaptive_pen,
          printSpace=False, printIteration=False, printBestCand=False,
          saveCSV=False, onlyBest=True, csvMode='a'):
 
@@ -35,7 +36,7 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
     pop = ifunc.firstPop(inputSize, popSize, minLimit, maxLimit)
 
     # Step 2: Population evaluation
-    pop = ifunc.evaluatePop(pop)
+    pop = ifunc.evaluatePop(pop, iter, adaptive_pen)
 
     # Dynamic Termination - Best Cand List
     bestCandList = []
@@ -44,22 +45,22 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
     while True:
         # Step 4: Teacher allocation phase
         pop.sort(key=lambda x: x[-1])  # Pop List is sorting.
-        teacher = ifunc.teacherAllo(pop)
+        teacher = ifunc.teacherAllo(pop, iter, adaptive_pen)
 
         # Step 5: Ability grouping phase
         bestGroup, worstGroup = ut.halfList(pop, popSize)
 
         # Step 6.1.1: Teacher Phase for Best Group
-        newBestGroup = ifunc.teachPhaseBest(bestGroup, teacher, F, minLimit, maxLimit, limitless)
+        newBestGroup = ifunc.teachPhaseBest(bestGroup, teacher, F, minLimit, maxLimit, limitless, iter, adaptive_pen)
 
         # Step 6.1.2: Student Phase for Best Group
-        lastBestGroup = ifunc.studentPhase(newBestGroup, bestGroup, minLimit, maxLimit, limitless)
+        lastBestGroup = ifunc.studentPhase(newBestGroup, bestGroup, minLimit, maxLimit, limitless, iter, adaptive_pen)
 
         # Step 6.2.1: Teacher Phase for Worst Group
-        newWorstGroup = ifunc.teachPhaseWorst(worstGroup, teacher, minLimit, maxLimit, limitless)
+        newWorstGroup = ifunc.teachPhaseWorst(worstGroup, teacher, minLimit, maxLimit, limitless, iter, adaptive_pen)
 
         # Step 6.2.2: Student Phase for Best Group
-        lastWorstGroup = ifunc.studentPhase(newWorstGroup, worstGroup, minLimit, maxLimit, limitless)
+        lastWorstGroup = ifunc.studentPhase(newWorstGroup, worstGroup, minLimit, maxLimit, limitless, iter, adaptive_pen)
 
         # Step 7: Construct population
         pop = lastBestGroup + lastWorstGroup
