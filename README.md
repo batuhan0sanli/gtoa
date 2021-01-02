@@ -8,6 +8,6 @@ Makalenin Orijinali: https://www.sciencedirect.com/science/article/abs/pii/S0957
 ### Yapılacaklar
 - [x] Statik olarak çözüm sağlanacak.
 - [x] Dinamik olarak çözüm sağlanacak. (iterasyonun iyileşme oranına göre optimizasyon sonlandırılacak)
-- [ ] Optimizasyonu iyileştirmek için amaç fonksiyonu düzenlenecek.
+- [x] Optimizasyonu iyileştirmek için amaç fonksiyonu düzenlenecek.
 - [ ] Optimizasyonu iyileştirmek için ceza artırma opsiyonu eklenecek.
 - [ ] Optimizasyonu iyileştirmek için popülasyon düşürme fonksiyonu eklenecek.
