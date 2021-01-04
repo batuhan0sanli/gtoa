@@ -38,6 +38,7 @@ limitless = False
 adaptive_pen = True
 
 # Amaç fonksiyonunda Ceza Katsayısı
+# Default 1
 factor = 1
 
 # --------------------------------------------
