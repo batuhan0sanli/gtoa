@@ -12,6 +12,7 @@ import copy
 def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stopNum, impRate=user.impRate, F=user.F,
          inputSize=user.inputSize, minLimit=user.minLimit, maxLimit=user.maxLimit, limitless=user.limitless,
          adaptive_pen=user.adaptive_pen,
+         half_population=user.half_population, halfPopImpRate=user.halfPopImpRate, halfPopPercent=user.halfPopPercent, mod=user.mod, lowerLim=user.lowerLim, sel_percent=user.sel_percent,
          printSpace=False, printIteration=False, printBestCand=False,
          saveCSV=False, onlyBest=True, csvMode='a'):
 
@@ -94,6 +95,11 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
             if prop["termQ"]:   # Eğer Minimum iterasyona ulaşılmışsa
                 if bestCandList[-max_noImp]*(1-impRate) < bestCand[-1]: break
 
+        # Dividing the Population in Half
+        if prop["termQ"]:  # Eğer Minimum iterasyona ulaşılmışsa
+            if half_population:
+                if bestCandList[round(-max_noImp*halfPopPercent)]*(1-halfPopImpRate) < bestCand[-1]:    # Eğer Popülasyonun ikiye bölünmesi gerekliyse
+                    print("BOLBOLBOLBOLBOLBOLBOLBOLBOLBOLBOLBOL")
 
     # Save CSV Settings
     if saveCSV:

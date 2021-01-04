@@ -34,12 +34,33 @@ limitless = False
 # --------------- IMPROVEMENTS ---------------
 # --------------------------------------------
 
+# --- Adaptive Penalty ---
 # Ceza'nın önemi iterasyon ilerledikçe yükselsin mi?
 adaptive_pen = True
 
 # Amaç fonksiyonunda Ceza Katsayısı
 # Default 1
 factor = 1
+
+
+# --- Dividing the Population in Half ---
+# Popülasyonu yarıya bölme geliştirmesi aktif olsun mu?
+half_population = True
+
+# Aranan iyileşme oranı
+halfPopImpRate = impRate
+
+# Son <halfPopPercent>*stopNum analizde iyileşme olmazsa yarıya düşürsün
+halfPopPercent = 0.2
+
+# Mod Seçimi (Detaylı bilgi için blz. adaptive_ideas/halfPopulation.py)
+mod = 1
+
+# Popülasyon kaç aday'ın altına düştüğünde yarıya düşürme işlemi yapılmasın?
+lowerLim = 3
+
+# Mod 2 / Mod 3 => Seçilecek en iyi / en kötü adayların yüzdesi
+sel_percent = 0.2
 
 # --------------------------------------------
 # --------------- IMPROVEMENTS ---------------
