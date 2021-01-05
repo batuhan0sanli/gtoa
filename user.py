@@ -4,7 +4,7 @@ from objectiveFunction import objectiveFunction
 # --------------- USER ---------------
 
 # Popülasyon Boyutu
-popSize = 20
+popSize = 100
 
 # Durdurma kriterinin iterasyon mu yoksa analiz bazlı mı çalışılacağı
 # (static iteration, static evaluation, dynamic iteration, dynamic evaluation) ("stit", "stev", "dyit" "dyev")
@@ -57,7 +57,7 @@ halfPopPercent = 0.2
 mod = 1
 
 # Popülasyon kaç aday'ın altına düştüğünde yarıya düşürme işlemi yapılmasın?
-lowerLim = 3
+lowerLim = 5
 
 # Mod 2 / Mod 3 => Seçilecek en iyi / en kötü adayların yüzdesi
 sel_percent = 0.2

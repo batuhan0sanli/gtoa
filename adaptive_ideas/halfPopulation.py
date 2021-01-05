@@ -14,14 +14,14 @@ from math import floor
 from random import choices
 
 
-def halfPop(pop, mod, lowerLim = 2, sel_percent = 0.2):
+def halfPop(pop, mod, lowerLim = 5, sel_percent = 0.2):
     # Break - Divide the population in half
     if len(pop) <= lowerLim:
         return pop
 
     pop.sort(key=lambda x: x[-1])
-    popNum = len(pop)//2
-
+    popNum = len(pop)//2        # 5 => 3 olabilmesi için
+    print("--------------- POPULASYON AZALTILDI ---------------")
 
     # Mod 1 = Popülasyondan seçilen adayların en iyi ilk yarısı alınır
     if mod == 1:
