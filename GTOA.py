@@ -23,16 +23,20 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
     prop["isIteration"] = True if stopCriteria[2:] == "it" else False   # iteration -> True | evaluation -> False
 
     # Step b: Information Termination Criteria
+    """
     if prop["isStatic"]:        # For Static
+        if prop["isIteration"]:
         max_iter = ifunc.calcIterSize(prop["isIteration"], popSize, stopNum)    # Maksimum izin verilen iterasyon
 
     else:                       # For Dynamic
         max_noImp = ifunc.calcIterSize(prop["isIteration"], popSize, stopNum)   # Maksimum iyileşmesiz izin verilen iterasyon
         prop["termQ"] = False   # max_noImp sayısına ulaşmadan sorgu yapılmamasını sağlar.
-
+    """
+    prop["termQ"] = False   # max_noImp sayısına ulaşmadan sorgu yapılmamasını sağlar.
     iter = 0
     ev = copy.copy(popSize)
     halfPopCount = 0
+    one_it_an = 2 * popSize + 1   # Bir iterasyonda kaç analiz yapıldığının bilgisidir.
 
     # Step 1: Initialization information
     pop = ifunc.firstPop(inputSize, popSize, minLimit, maxLimit)
@@ -69,7 +73,7 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
 
         # Step c: Print information
         iter += 1
-        ev += 2 * popSize + 1
+        ev += one_it_an
         halfPopCount += 1
 
         # Step d: Select Best Candidate - Append to bestCandList
@@ -86,24 +90,35 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
         if printBestCand:
             print(str(bestCand))
 
+
+        # TERMINATION
         # Dynamic Termination - Edit TermQ
         if not prop["termQ"]:
-            if iter == max_noImp: prop["termQ"] = True
+            if prop["isIteration"]:
+                if iter == stopNum: prop["termQ"] = True
+            else:
+                if ev >= stopNum: prop["termQ"] = True
 
         # Static Termination
-        if prop["isStatic"] and not iter < max_iter: break
+        if prop["isStatic"] and ifunc.staticTerm(prop["isIteration"], iter, ev, stopNum, one_it_an):
+            break
+
         # Dynamic Termination
         else:
-            if prop["termQ"]:   # Eğer Minimum iterasyona ulaşılmışsa
-                if bestCandList[-max_noImp]*(1-impRate) < bestCand[-1]: break
+            if prop["termQ"]:
+                if ifunc.dynamicTerm(prop["isIteration"], bestCandList, impRate, stopNum, popSize):
+                    break
+
 
         # Dividing the Population in Half
-        if half_population:  # Eğer Minimum iterasyona ulaşılmışsa
-            elem = round(max_noImp*halfPopPercent)  # incelenecek elemanın sonran indexi
-            if halfPopCount >= elem:
-                if bestCandList[-elem]*(1-halfPopImpRate) < bestCand[-1]:    # Eğer Popülasyonun ikiye bölünmesi gerekliyse
-                    pop = hP.halfPop(pop, mod, lowerLim, sel_percent)
-                    halfPopCount = 0
+        # Eğer Popülasyonu ikiye bölme işlemi açıksa
+        if half_population:
+
+            # Eğer şartlar sağlanıyorsa
+            if ifunc.halfPopQ(prop["isIteration"], stopNum, halfPopPercent, halfPopImpRate, popSize, bestCandList, halfPopCount):
+                pop = hP.halfPop(pop, mod, lowerLim, sel_percent)
+                halfPopCount = 0
+
 
     # Save CSV Settings
     if saveCSV:

@@ -158,5 +158,56 @@ def teachPhaseWorst(pop, teacher, minLimit, maxLimit, limitless, iter, adaptive_
         newPop.append(chooseCand(cand, newCand))
     return newPop
 
+# It decides whether the iterations will continue or not for Static Termination
+def staticTerm(isIter, cur_iter, cur_ev, stopNum, one_it_an):
+    # Static Iteration Termination
+    if isIter:
+        if cur_iter >= stopNum: return True
+
+    # Static Evaluation Termination
+    else:
+        if cur_ev + one_it_an >= stopNum + 1: return True
+    return False
+
+# Evaluation to Iteration
+def ev2it(ev, popSize):
+    ev = ev - popSize
+    return ev // (2*popSize + 1)
+
+
+# It decides whether the iterations will continue or not for Dynamic Termination
+def dynamicTerm(isIter, bestCandList, impRate, stopNum, popSize):
+    # Eğer analiz bazlı çalışıyor ise
+    if not isIter:
+        stopNum = ev2it(stopNum, popSize)
+
+    oldCand = bestCandList[-stopNum]
+    newCand = bestCandList[-1]
+
+    if oldCand * (1 - impRate) < newCand: return True
+    else: return False
+
+# Controls the population division requirement
+def halfPopQ(isIter, stopNum, halfPopPercent, halfPopImpRate, popSize, bestCandList, halfPopCount):
+    # Eğer iterasyon bazlı çalışıyor ise
+    if isIter:
+        countLim = round(stopNum * halfPopPercent)  # Sondan kaçıncı elemanın indexi olduğu
+
+    # Eğer analiz bazlı çalışıyor ise
+    else:
+        countLim = round(ev2it(stopNum, popSize) * halfPopPercent)  # Sondan kaçıncı elemanın indexi olduğu
+
+    # Yeteri kadar iterasyon yapılmışsa
+    if halfPopCount >= countLim:
+        oldCand = bestCandList[-countLim]
+        newCand = bestCandList[-1]
+
+        # Yeni aday "halfPopImpRate" oranında eski adaydan daha iyiyse
+        if oldCand * (1 - halfPopImpRate) < newCand:
+            return True
+        else:
+            return False
+    else:
+        return False
 # --------------- ITER FUNCTIONS ---------------
 # ---------------------------------------------
