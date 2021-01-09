@@ -6,3 +6,4 @@ resultsOLD/*
 venv/*
 test.py
 solveTrussL.py
+adaptive_ideas/__pycache__/*
