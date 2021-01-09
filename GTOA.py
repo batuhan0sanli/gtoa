@@ -4,7 +4,7 @@ import user
 import iterFunctions as ifunc
 import utilities as ut
 import copy
-
+import adaptive_ideas.halfPopulation as hP
 
 
 # ---------------------------------------------
@@ -12,6 +12,7 @@ import copy
 def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stopNum, impRate=user.impRate, F=user.F,
          inputSize=user.inputSize, minLimit=user.minLimit, maxLimit=user.maxLimit, limitless=user.limitless,
          adaptive_pen=user.adaptive_pen,
+         half_population=user.half_population, halfPopImpRate=user.halfPopImpRate, halfPopPercent=user.halfPopPercent, mod=user.mod, lowerLim=user.lowerLim, sel_percent=user.sel_percent,
          printSpace=False, printIteration=False, printBestCand=False,
          saveCSV=False, onlyBest=True, csvMode='a'):
 
@@ -31,6 +32,7 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
 
     iter = 0
     ev = copy.copy(popSize)
+    halfPopCount = 0
 
     # Step 1: Initialization information
     pop = ifunc.firstPop(inputSize, popSize, minLimit, maxLimit)
@@ -68,6 +70,7 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
         # Step c: Print information
         iter += 1
         ev += 2 * popSize + 1
+        halfPopCount += 1
 
         # Step d: Select Best Candidate - Append to bestCandList
         bestCand = min(pop, key=lambda x: x[-1])
@@ -78,7 +81,7 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
             print("")
 
         if printIteration:
-            print(f"Iteration No: {iter}    Evaluation No: {ev}    Best Solve: {bestCand[-1]}")
+            print(f"Iteration No: {iter}    Evaluation No: {ev}    Length Pop: {len(pop)}    Best Solve: {bestCand[-1]}")
 
         if printBestCand:
             print(str(bestCand))
@@ -94,6 +97,13 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
             if prop["termQ"]:   # Eğer Minimum iterasyona ulaşılmışsa
                 if bestCandList[-max_noImp]*(1-impRate) < bestCand[-1]: break
 
+        # Dividing the Population in Half
+        if half_population:  # Eğer Minimum iterasyona ulaşılmışsa
+            elem = round(max_noImp*halfPopPercent)  # incelenecek elemanın sonran indexi
+            if halfPopCount >= elem:
+                if bestCandList[-elem]*(1-halfPopImpRate) < bestCand[-1]:    # Eğer Popülasyonun ikiye bölünmesi gerekliyse
+                    pop = hP.halfPop(pop, mod, lowerLim, sel_percent)
+                    halfPopCount = 0
 
     # Save CSV Settings
     if saveCSV:
