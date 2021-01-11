@@ -36,7 +36,6 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
     iter = 0
     ev = copy.copy(popSize)
     halfPopCount = 0
-    one_it_an = 2 * popSize + 1   # Bir iterasyonda kaç analiz yapıldığının bilgisidir.
 
     # Step 1: Initialization information
     pop = ifunc.firstPop(inputSize, popSize, minLimit, maxLimit)
@@ -49,6 +48,7 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
 
 
     while True:
+        one_it_an = 2 * len(pop) + 1   # Bir iterasyonda kaç analiz yapıldığının bilgisidir. Popülasyon değişebileceğinden her iterasyonda tekrar hesaplanır.
         # Step 4: Teacher allocation phase
         pop.sort(key=lambda x: x[-1])  # Pop List is sorting.
         teacher = ifunc.teacherAllo(pop, iter, adaptive_pen)
@@ -119,13 +119,12 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
                 pop = hP.halfPop(pop, mod, lowerLim, sel_percent)
                 halfPopCount = 0
 
-
     # Save CSV Settings
     if saveCSV:
         if onlyBest:
-            ifunc.writeCSV(bestCand, popSize, stopNum, F, mode=csvMode, onlyBest=onlyBest)
+            ifunc.writeCSV(bestCand, popSize, stopCriteria, stopNum, F, adaptive_pen, half_population, mod, mode=csvMode, onlyBest=onlyBest)
         else:
-            ifunc.writeCSV(pop, popSize, stopNum, F, mode=csvMode, onlyBest=onlyBest)
+            ifunc.writeCSV(pop, popSize, stopCriteria, stopNum, F, mode=csvMode, onlyBest=onlyBest)
     return pop
 # --------------- MAIN FUNCTION ---------------
 # ---------------------------------------------
