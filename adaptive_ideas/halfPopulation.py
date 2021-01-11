@@ -21,7 +21,6 @@ def halfPop(pop, mod, lowerLim = 5, sel_percent = 0.2):
 
     pop.sort(key=lambda x: x[-1])
     popNum = len(pop)//2        # 5 => 3 olabilmesi için
-    print("--------------- POPULASYON AZALTILDI ---------------")
 
     # Mod 1 = Popülasyondan seçilen adayların en iyi ilk yarısı alınır
     if mod == 1:
