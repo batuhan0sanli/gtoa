@@ -3,21 +3,25 @@ import os
 from statistics import mean
 from utilities import fixLength
 
-stopNum = 25000
+stopNum = 20000
 F = 1
-popSizes = []
+popSizes = [50]
 
 os.chdir(os.getcwd() + "/results")
 
 # PopSizes List
 for iCsv in os.listdir():
     if "stopNum" in iCsv:
-        for prop in iCsv.split("_"):
+        for prop in iCsv.split("__"):
             key, val = prop.split("=")
             if key == "popSize":
                 popSizes.append(int(val))
 popSizes.sort()
 
+stopCriteria = "stev"
+adaptive_pen = "False"
+half_population = "True"
+mod = "3"
 
 # Read Csv
 print()
@@ -25,7 +29,7 @@ print(f"                         {stopNum} Analiz için değerler               
 print("|    Pop Size    |    Best Value    |    Mean Value    |    Worst Value    |")
 print("----------------------------------------------------------------------------")
 for popSize in popSizes:
-    name = f"stopNum={stopNum}_popSize={popSize}_F={F}.csv"
+    name = f'stop={stopNum}{stopCriteria}__pSize={popSize}__F={F}__aPen={adaptive_pen}__hPop={half_population}__hfMod={mod}.csv'
     temp = []
     with open(name) as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')

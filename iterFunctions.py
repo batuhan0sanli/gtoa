@@ -8,8 +8,8 @@ import csv
 # --------------- ITER FUNCTIONS ---------------
 
 # Write CSV File
-def writeCSV(li, popSize, stopNum, F, mode='w', onlyBest=True):
-    name = f'stopNum={stopNum}_popSize={popSize}_F={F}'
+def writeCSV(li, popSize, stopCriteria, stopNum, F, adaptive_pen, half_population, mod, mode='w', onlyBest=True):
+    name = f'stop={stopNum}{stopCriteria}__pSize={popSize}__F={F}__aPen={adaptive_pen}__hPop={half_population}__hfMod={mod}'
 
     with open(f'results/{name}.csv', mode=mode) as csv_file:
         writer = csv.writer(csv_file)

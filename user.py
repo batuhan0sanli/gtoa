@@ -4,18 +4,18 @@ from objectiveFunction import objectiveFunction
 # --------------- USER ---------------
 
 # Popülasyon Boyutu
-popSize = 100
+popSize = 50
 
 # Durdurma kriterinin iterasyon mu yoksa analiz bazlı mı çalışılacağı
 # (static iteration, static evaluation, dynamic iteration, dynamic evaluation) ("stit", "stev", "dyit" "dyev")
 # Son n analizde %0.1'den daha az iyileşme olursa dur
-stopCriteria = "dyit"
+stopCriteria = "dyev"
 
 # Maksimum izin verilen iterasyon / analiz sayısı  /  maksimum iyileşme olmadan izin verilen iterasyon / analiz sayısı
-stopNum = 300
+stopNum = 30000
 
 # İstenen İyileşme oranı
-impRate = 0.0001
+impRate = 0.0000000001
 
 # F değeri (öğretim faktörü) (1 veya 2 seçilebilir)
 F = 1
@@ -51,13 +51,13 @@ half_population = True
 halfPopImpRate = impRate
 
 # Son <halfPopPercent>*stopNum analizde iyileşme olmazsa yarıya düşürsün
-halfPopPercent = 0.2
+halfPopPercent = 0.3
 
 # Mod Seçimi (Detaylı bilgi için blz. adaptive_ideas/halfPopulation.py)
-mod = 1
+mod = 2
 
 # Popülasyon kaç aday'ın altına düştüğünde yarıya düşürme işlemi yapılmasın?
-lowerLim = 5
+lowerLim = 6
 
 # Mod 2 / Mod 3 => Seçilecek en iyi / en kötü adayların yüzdesi
 sel_percent = 0.2
