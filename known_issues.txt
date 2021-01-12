@@ -1,0 +1,2 @@
+- Dinamik sonlandırma işlemi, popülasyonu yarıya düşür iyileştirmesiyle beraber çalışırken seçimi düzgün yapamayabiliyor.
+- csvMode = 'w' seçildiğinde beklendiği gibi çalışmıyor. Her çalışma sonrasında sıfırlanıyor sadece en başta değil.
