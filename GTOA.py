@@ -9,29 +9,53 @@ import adaptive_ideas.halfPopulation as hP
 
 # ---------------------------------------------
 # --------------- MAIN FUNCTION ---------------
-def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stopNum, impRate=user.impRate, F=user.F,
+def GTOA(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stopNum, impRate=user.impRate, F=user.F,
          inputSize=user.inputSize, minLimit=user.minLimit, maxLimit=user.maxLimit, limitless=user.limitless,
          adaptive_pen=user.adaptive_pen,
-         half_population=user.half_population, halfPopImpRate=user.halfPopImpRate, halfPopPercent=user.halfPopPercent, mod=user.mod, lowerLim=user.lowerLim, sel_percent=user.sel_percent,
+         half_population=user.half_population, halfPopImpRate=user.halfPopImpRate, halfPopPercent=user.halfPopPercent,
+         mod=user.mod, lowerLim=user.lowerLim, sel_percent=user.sel_percent,
          printSpace=False, printIteration=False, printBestCand=False,
          saveCSV=False, onlyBest=True, csvMode='a'):
+    """
+    Group Teaching Optimization Algorithm (GTOA) için ana fonksiyondur.
+    Tüm argümanlar opsiyoneldir. Argüman girilmez ise gerekli argümanlar user.py dosyasından çekilecektir.
+
+    Popülasyon Bilgisi:
+    popSize:        Popülasyon boyutu (int)
+    stopCriteria:   Durdurma kriteri (str)
+    stopNum:        Durdurma sayısı (int)
+    impRate:        İstenen iyileşme oranı (float)
+    F:              Öğrenme katsayısı / F değeri (int)
+    inputSize:      Tasarım değişkeni sayısı (int)
+    minLimit:       İstenen minimum değer (int or float)
+    maxLimit:       İstenen maximum değer (int or float)
+    limitless:      Adayın alabileceği değerlerin sınırsız olduğunu söyler (bool)
+
+    İyileştirme Ayarları:
+    adaptive_pen:       Adaptif ceza iyileştirmesinin aktif olma durumu (bool)
+    half_population:    Popülasyonu yarıya düşürme iyileşmesinin aktif olma durumu (bool)
+    halfPopImpRate:     Yarıya düşürülmemesini sağlamak için istenen iyileşme oranı (float)
+    halfPopPercent:     stopNum'un hangi oranında yarıya düşürme işleminin yapılması istendiğini söyler (float)
+    mod:                Popülasyonu yarıya düşürme iyileştirmesinde tercih edilen mod [1, 2, 3]
+    lowerLim:           Popülasyon boyutunun lowerLim değerinin altına düştüğünde düşürme işleminin yapılmaması (int)
+    sel_percent:        Mod 2 ve 3 için tercih edilen seçim oranı (float)
+
+    Yazdırma Ayarları:
+    printSpace:     Aralarda boşluk bırakır (bool)
+    printIteration: İterasyon hakkında bilgileri yazdırır -iterasyon no, analiz no, popülasyon boyutu, en iyi çözüm- (bool)
+    printBestCand:  En iyi adayı yazdırır (bool)
+
+    CSV Kayıt Ayarları:
+    saveCSV:    CSV kaydının yapılmasını sağlar (bool)
+    onlyBest:   Tüm popülasyonun değil sadece en iyi adayın kaydedilmesini sağlar (bool)
+    csvMode:    CSV kaydında tercih edilecek kayıt modu ['a', 'w' ..]
+    """
 
     # Step a: Dictionary
     prop = {}
 
     prop["isStatic"] = True if stopCriteria[:2] == "st" else False      # static -> True    | dynamic -> False
     prop["isIteration"] = True if stopCriteria[2:] == "it" else False   # iteration -> True | evaluation -> False
-
-    # Step b: Information Termination Criteria
-    """
-    if prop["isStatic"]:        # For Static
-        if prop["isIteration"]:
-        max_iter = ifunc.calcIterSize(prop["isIteration"], popSize, stopNum)    # Maksimum izin verilen iterasyon
-
-    else:                       # For Dynamic
-        max_noImp = ifunc.calcIterSize(prop["isIteration"], popSize, stopNum)   # Maksimum iyileşmesiz izin verilen iterasyon
-        prop["termQ"] = False   # max_noImp sayısına ulaşmadan sorgu yapılmamasını sağlar.
-    """
     prop["termQ"] = False   # max_noImp sayısına ulaşmadan sorgu yapılmamasını sağlar.
     iter = 0
     ev = copy.copy(popSize)
@@ -46,7 +70,6 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
     # Dynamic Termination - Best Cand List
     bestCandList = []
 
-
     while True:
         one_it_an = 2 * len(pop) + 1   # Bir iterasyonda kaç analiz yapıldığının bilgisidir. Popülasyon değişebileceğinden her iterasyonda tekrar hesaplanır.
         # Step 4: Teacher allocation phase
@@ -54,7 +77,7 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
         teacher = ifunc.teacherAllo(pop, iter, adaptive_pen)
 
         # Step 5: Ability grouping phase
-        bestGroup, worstGroup = ut.halfList(pop, popSize)
+        bestGroup, worstGroup = ut.halfList(pop)
 
         # Step 6.1.1: Teacher Phase for Best Group
         newBestGroup = ifunc.teachPhaseBest(bestGroup, teacher, F, minLimit, maxLimit, limitless, iter, adaptive_pen)
@@ -133,4 +156,5 @@ def main(popSize=user.popSize, stopCriteria=user.stopCriteria, stopNum=user.stop
 
 if __name__ == '__main__':
     print("WARNING! ONLY SINGLE ANALYSIS \n")
-    main(printBestCand=False, printIteration=True)
+    GTOA(printBestCand=False, printIteration=True)
+

@@ -1,15 +1,5 @@
-# genellik
-# kesinlik
-# sağlamlık
-# verimlilik
-
-
-# Gerekli kütüphaneler import ediliyor
-# ------------------------------------
 from solveTrussL import *
 import copy
-# ------------------------------------
-
 
 
 # OpenSees kütüphanesini kullanarak 2 ve 3 boyutlu kafes sistemleri çözer.
@@ -41,9 +31,6 @@ import copy
 # -------------------------------------------------------------------------------
 
 
-
-
-
 # cozum fonksiyonu sonlu elemanlar cozucuzunu 1 kez çağırır
 def objectiveFunction(alan, yapi, factor, iter, iter_div):
     yeniYapi=copy.deepcopy(yapi)
@@ -61,15 +48,6 @@ def objectiveFunction(alan, yapi, factor, iter, iter_div):
     #print(amac)
     return(amac)
 
-
-# toplam yer değiştirme ihlali: 6.37 (1.445, 2.38, 2.36)
-# toplam gerilme ihlali: 30.37 (1.4, 1.81)
-# Bunu optimize et: W = w(1+p)^2
-# W = 5968.63*(1+6.37+30.37)^2=8.5*10^6 KÖTÜ
-# W = 5968.63*(1+1.445+2.38+2.35+1.4+1.81)^2 İYİ
-# pipeline
-
-denemeAlan=[22.12, 10.21, 4.55, 1.23, 5.66, 34.33, 23.11, 24.33, 11.34, 3.23]
 
 """
 print("--------------------------")

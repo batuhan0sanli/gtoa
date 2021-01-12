@@ -8,13 +8,26 @@
 
 # lowerLim = Popülasyon sayısı bu miktarın altına düşerse popülasyonu yarılama işlemi yapma
 # -------------------------------------
-# --------------- USAGE ---------------
 
 from math import floor
 from random import choices
 
 
 def halfPop(pop, mod, lowerLim = 5, sel_percent = 0.2):
+    """
+    Popülasyonu ikiye bölerek iterasyonlardaki analiz sayısını düşüren bir iyileştirmedir.
+    Mod 1 = Popülasyondan seçilen adayların en iyi ilk yarısı alınır
+    Mod 2 = Popülasyondan seçilen adayların %x'i en iyi aday kalanı randomdur (0 <= x <= 1)
+    Mod 3 = Popülasyondan seçilen adayların %x'i en iyi, %x'i en kötü, kalanı randomdur (0 <= x <= 0.5)
+
+    Zorunlu argümanlar:
+    pop:    Popülasyonun kendisi (list)
+    mod:    Tercih edilen mod [1, 2, 3]
+
+    Opsiyonel argümanlar:
+    lowerLim:       Popülasyon boyutunun lowerLim değerinin altına düştüğünde düşürme işleminin yapılmaması (int)
+    sel_percent:    Mod 2 ve 3 için tercih edilen seçim oranı (float)
+    """
     # Break - Divide the population in half
     if len(pop) <= lowerLim:
         return pop
